@@ -1,22 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Bot
 {
-    static class Program
+    /// <summary>
+    /// Test app that can be run standalone, or using Inject.exe.
+    /// </summary>
+    public class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Method that matches our injection signature: 
+        /// http://msdn.microsoft.com/en-us/library/ms164411.aspx
         /// </summary>
-        [STAThread]
-        static void Main()
+        /// <param name="pwzArgument">Optional argument to pass in.</param>
+        /// <returns>An integer code defined by you.</returns>
+        private static int EntryPoint(string pwzArgument)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            // play sound
+            System.Media.SystemSounds.Beep.Play();
+            
+            Functions functions = new Functions();
+            functions.Yell();
+            functions.Yell();
+            functions.Yell();
+            
+            // show modal message box
+            MessageBox.Show(
+                "I am a managed app.\n\n" + 
+                "I am running inside: [" + System.Diagnostics.Process.GetCurrentProcess().ProcessName + "]\n\n" +
+                (String.IsNullOrEmpty(pwzArgument) ? "I was not given an argument" : "I was given this argument: [" + pwzArgument + "]"));
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Main method. Invoked when app is run standalone.
+        /// </summary>
+        /// <param name="args"></param>
+        static void Main(string[] args)
+        {
+            EntryPoint("hello world");
         }
     }
 }
